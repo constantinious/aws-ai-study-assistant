@@ -33,7 +33,7 @@ export function AccuracyRadar({ domains }: Props) {
             fill="#3b82f6"
             fillOpacity={0.2}
           />
-          <Tooltip formatter={(val: number) => [`${val}%`, 'Accuracy']} />
+          <Tooltip formatter={(val) => [`${val}%`, 'Accuracy']} />
         </RadarChart>
       </ResponsiveContainer>
     </div>
