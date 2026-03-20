@@ -1,0 +1,47 @@
+# Terraform
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.backup
+*.tfvars
+!backend.tfvars
+terraform/lambda_placeholder.zip
+terraform/.terraform/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+dist/
+.coverage
+htmlcov/
+.pytest_cache/
+*.egg
+
+# Node / Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+
+# Lambda build artifacts
+backend/dist/
+backend/*.zip
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# AWS docs (large PDFs — manage separately)
+data/whitepapers/*.pdf
