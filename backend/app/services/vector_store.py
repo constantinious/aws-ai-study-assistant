@@ -93,7 +93,10 @@ def upsert_chunks(chunks: list[dict]) -> int:
             }
         )
 
-    if vectors:
-        index.upsert(vectors=vectors)
+    batch_size = 100
+    for i in range(0, len(vectors), batch_size):
+        batch = vectors[i : i + batch_size]
+        index.upsert(vectors=batch)
+        logger.info("Upserted batch %d/%d (%d vectors)", i // batch_size + 1, -(-len(vectors) // batch_size), len(batch))
 
     return len(vectors)
