@@ -2,8 +2,10 @@
 
 import json
 import logging
+import time
 
 import boto3
+from botocore.config import Config
 from pinecone import Pinecone
 
 from app.config import settings
@@ -22,18 +24,30 @@ def _get_client() -> Pinecone:
     return _pinecone_client
 
 
+_bedrock_config = Config(read_timeout=120, retries={"max_attempts": 5, "mode": "adaptive"})
+
+
 def _embed(text: str) -> list[float]:
     """Generate embedding using Amazon Titan Embed v2 via Bedrock."""
-    client = boto3.client("bedrock-runtime", region_name=settings.bedrock_region)
+    client = boto3.client("bedrock-runtime", region_name=settings.bedrock_region, config=_bedrock_config)
     body = json.dumps({"inputText": text, "dimensions": 1024, "normalize": True})
-    response = client.invoke_model(
-        modelId=settings.embedding_model_id,
-        body=body,
-        contentType="application/json",
-        accept="application/json",
-    )
-    result = json.loads(response["body"].read())
-    return result["embedding"]
+    for attempt in range(3):
+        try:
+            response = client.invoke_model(
+                modelId=settings.embedding_model_id,
+                body=body,
+                contentType="application/json",
+                accept="application/json",
+            )
+            result = json.loads(response["body"].read())
+            return result["embedding"]
+        except Exception as exc:
+            if attempt == 2:
+                raise
+            wait = 2 ** attempt
+            logger.warning("Bedrock embed attempt %d failed (%s), retrying in %ds", attempt + 1, exc, wait)
+            time.sleep(wait)
+    raise RuntimeError("unreachable")
 
 
 class RetrievalResult:

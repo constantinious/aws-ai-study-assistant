@@ -35,7 +35,7 @@ upload-docs: ## Sync local whitepapers to S3 docs bucket
 	@echo "Uploaded docs to s3://$(DOCS_BUCKET)/whitepapers/"
 
 ingest: ## Run Pinecone ingestion pipeline against S3 docs
-	cd $(BACKEND_DIR) && python -m scripts.ingest
+	cd $(BACKEND_DIR) && .venv/bin/python -m scripts.ingest
 
 ## ── Backend ──────────────────────────────────────────────────────────────────
 
