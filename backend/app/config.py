@@ -15,10 +15,10 @@ class Settings(BaseSettings):
     pinecone_index_name: str = "aif-study-docs"
     environment: str = "prod"
 
-    # Bedrock model IDs
+    # Bedrock model IDs — use EU cross-region inference profiles for newer models
     embedding_model_id: str = "amazon.titan-embed-text-v2:0"
-    generation_model_id: str = "anthropic.claude-3-haiku-20240307-v1:0"
-    explanation_model_id: str = "anthropic.claude-3-sonnet-20240229-v1:0"
+    generation_model_id: str = "eu.anthropic.claude-haiku-4-5-20251001-v1:0"
+    explanation_model_id: str = "eu.anthropic.claude-3-5-sonnet-20240620-v1:0"
 
     class Config:
         env_file = ".env"
