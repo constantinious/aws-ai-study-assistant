@@ -43,5 +43,6 @@ backend/*.zip
 .vscode/
 *.swp
 
-# AWS docs (large PDFs — manage separately)
-data/whitepapers/*.pdf
+# AWS docs (large files — sync to S3 via make upload-docs, not git)
+data/whitepapers/**/*.pdf
+data/whitepapers/**/*.txt
