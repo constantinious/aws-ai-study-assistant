@@ -87,15 +87,22 @@ def ingest_bucket(bucket_name: str) -> None:
     for page in paginator.paginate(Bucket=bucket_name, Prefix="whitepapers/"):
         for obj in page.get("Contents", []):
             key = obj["Key"]
-            if not key.lower().endswith(".pdf"):
+            is_pdf = key.lower().endswith(".pdf")
+            is_txt = key.lower().endswith(".txt")
+            if not (is_pdf or is_txt):
                 continue
 
             logger.info("Processing s3://%s/%s", bucket_name, key)
             response = s3.get_object(Bucket=bucket_name, Key=key)
-            pdf_bytes = response["Body"].read()
+            content = response["Body"].read()
 
             domain = _infer_domain(key)
-            pages = _extract_text_from_pdf(pdf_bytes)
+
+            if is_pdf:
+                pages = _extract_text_from_pdf(content)
+            else:
+                text = re.sub(r"\s+", " ", content.decode("utf-8")).strip()
+                pages = [(text, 1)]
 
             chunks = []
             for page_text, page_num in pages:
