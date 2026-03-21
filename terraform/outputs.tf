@@ -28,6 +28,11 @@ output "cloudfront_distribution_domain" {
   value       = aws_cloudfront_distribution.frontend.domain_name
 }
 
+output "app_url" {
+  description = "Public app URL"
+  value       = "https://${local.domain_name}"
+}
+
 output "dynamodb_table_name" {
   description = "DynamoDB user progress table name"
   value       = aws_dynamodb_table.user_progress.name

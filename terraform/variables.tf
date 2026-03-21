@@ -25,11 +25,11 @@ variable "github_repo" {
 variable "cognito_callback_urls" {
   description = "Allowed callback URLs for Cognito app client"
   type        = list(string)
-  default     = ["http://localhost:5173"]
+  default     = ["http://localhost:5173", "https://study.condevelop.net"]
 }
 
 variable "cognito_logout_urls" {
   description = "Allowed logout URLs for Cognito app client"
   type        = list(string)
-  default     = ["http://localhost:5173"]
+  default     = ["http://localhost:5173", "https://study.condevelop.net"]
 }
