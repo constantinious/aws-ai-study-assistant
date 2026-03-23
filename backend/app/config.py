@@ -15,10 +15,10 @@ class Settings(BaseSettings):
     pinecone_index_name: str = "aif-study-docs"
     environment: str = "prod"
 
-    # Bedrock model IDs — use EU cross-region inference profiles for newer models
+    # Bedrock model IDs — Amazon Nova (no use case form required)
     embedding_model_id: str = "amazon.titan-embed-text-v2:0"
-    generation_model_id: str = "eu.anthropic.claude-haiku-4-5-20251001-v1:0"
-    explanation_model_id: str = "eu.anthropic.claude-3-5-sonnet-20240620-v1:0"
+    generation_model_id: str = "eu.amazon.nova-lite-v1:0"
+    explanation_model_id: str = "eu.amazon.nova-pro-v1:0"
 
     class Config:
         env_file = ".env"

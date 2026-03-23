@@ -48,10 +48,8 @@ def _call_bedrock(prompt: str, model_id: str) -> str:
     client = boto3.client("bedrock-runtime", region_name=settings.bedrock_region)
     body = json.dumps(
         {
-            "anthropic_version": "bedrock-2023-05-31",
-            "max_tokens": 1024,
-            "temperature": 0.7,
-            "messages": [{"role": "user", "content": prompt}],
+            "inferenceConfig": {"maxTokens": 1024, "temperature": 0.7},
+            "messages": [{"role": "user", "content": [{"text": prompt}]}],
         }
     )
     response = client.invoke_model(
@@ -61,7 +59,7 @@ def _call_bedrock(prompt: str, model_id: str) -> str:
         accept="application/json",
     )
     result = json.loads(response["body"].read())
-    return result["content"][0]["text"]
+    return result["output"]["message"]["content"][0]["text"]
 
 
 def _parse_question_json(raw: str) -> dict:
