@@ -55,9 +55,17 @@ resource "aws_apigatewayv2_integration" "lambda" {
   payload_format_version = "2.0"
 }
 
-resource "aws_apigatewayv2_route" "proxy_auth" {
+resource "aws_apigatewayv2_route" "proxy_get" {
   api_id             = aws_apigatewayv2_api.main.id
-  route_key          = "ANY /api/v1/{proxy+}"
+  route_key          = "GET /api/v1/{proxy+}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+}
+
+resource "aws_apigatewayv2_route" "proxy_post" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "POST /api/v1/{proxy+}"
   authorization_type = "JWT"
   authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
   target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
