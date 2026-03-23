@@ -36,10 +36,19 @@ resource "aws_iam_role_policy" "lambda_app" {
         Resource = [
           # Titan Embed — direct foundation model
           "arn:aws:bedrock:${var.aws_region}::foundation-model/amazon.titan-embed-text-v2:0",
-          # Claude models via EU cross-region inference profiles
+          # EU cross-region inference profiles
           "arn:aws:bedrock:${var.aws_region}:${data.aws_caller_identity.current.account_id}:inference-profile/eu.anthropic.claude-haiku-4-5-20251001-v1:0",
           "arn:aws:bedrock:${var.aws_region}:${data.aws_caller_identity.current.account_id}:inference-profile/eu.anthropic.claude-3-5-sonnet-20240620-v1:0",
+          # Underlying foundation models in any EU region (cross-region routing)
+          "arn:aws:bedrock:eu-*::foundation-model/anthropic.claude-haiku-4-5-20251001-v1:0",
+          "arn:aws:bedrock:eu-*::foundation-model/anthropic.claude-3-5-sonnet-20240620-v1:0",
         ]
+      },
+      {
+        Sid    = "SecretsManagerRead"
+        Effect = "Allow"
+        Action = ["secretsmanager:GetSecretValue"]
+        Resource = ["arn:aws:secretsmanager:${var.aws_region}:${data.aws_caller_identity.current.account_id}:secret:${var.project_name}/*"]
       },
       {
         Sid    = "DynamoDBAccess"
