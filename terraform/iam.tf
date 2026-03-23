@@ -143,15 +143,10 @@ resource "aws_iam_role_policy" "github_actions" {
         Resource = [aws_cloudfront_distribution.frontend.arn]
       },
       {
-        Sid    = "TerraformProvision"
-        Effect = "Allow"
-        Action = ["*"]
+        Sid      = "TerraformProvision"
+        Effect   = "Allow"
+        Action   = ["*"]
         Resource = ["*"]
-        Condition = {
-          StringEquals = {
-            "aws:RequestedRegion" = var.aws_region
-          }
-        }
       },
     ]
   })
